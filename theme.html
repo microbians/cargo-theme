@@ -100,7 +100,7 @@
 
                 var thumb_url = "http://i.ytimg.com/vi/"+youtube_id+"/0.jpg"
    
-	            $("#thumb_"+id+" .video").prepend("<div class=\"bg rounded\" style=\"background-size:150%;background-image:url('"+thumb_url+"');\"></div>")
+	            $("#thumb_"+id+" .video").prepend("<div class=\"bg rounded\" style=\"background-size:cover;background-image:url('"+thumb_url+"');\"></div>")
 }else if(swf.indexOf("vimeo.com") >= 0) {
     			if (swf.indexOf('clip_id=')!=-1) var temp = swf.split("clip_id=")[1];
 				else var temp=swf.split("/")[swf.split("/").length-1];
@@ -113,7 +113,7 @@
 	
 	$.getJSON("http://vimeo.com/api/v2/video/"+vimeo_id+".json?callback=?", function(d){
 		var thumb_url = d[0].thumbnail_large
-		$("#thumb_"+id+" .video").prepend("<div class=\"bg rounded\" style=\"background-size:150%;background-image:url('"+thumb_url+"');\"></div>")
+		$("#thumb_"+id+" .video").prepend("<div class=\"bg rounded\" style=\"background-size:cover;background-image:url('"+thumb_url+"');\"></div>")
 	});
 }
 

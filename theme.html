@@ -68,6 +68,73 @@
 		
 		{CustomCSS}
 		</style>
+        
+        <script>
+        //<!--
+        function getVideoThumbs(){
+			$(".post .video").each(function(){    
+				var swf = "";
+				var id = $(this).parent().parent().attr("id");
+				
+				$(this).children("object").children("param").each(function(){
+					if($(this).attr("name") == "movie"){
+						swf = $(this).attr("value")
+					}
+				})
+
+				var isIFRAME=false;
+				if (swf=="") {
+					$(this).children("iframe").each(function(){
+						swf = $(this).attr("src");
+					});      
+				}                                
+				
+			if(swf.indexOf("youtube.com") >= 0){        
+                var data=swf;
+                if (data.indexOf('/embed/')!=-1) data=data.split('/embed/')[1];
+                if (data.indexOf('http://www.youtube.com/v/')!=-1) var temp = data.split("http://www.youtube.com/v/")[1];
+                else var temp=data;
+
+                if (temp.indexOf('?')!=-1) var youtube_id = temp.split("?")[0];
+                else if (temp.indexOf('&')!=-1) var youtube_id = temp.split("&")[0];
+
+                var thumb_url = "http://i.ytimg.com/vi/"+youtube_id+"/0.jpg"
+   
+	            $("#thumb_"+id+" .video").prepend("<div class=\"bg rounded\" style=\"background-size:150%;background-image:url('"+thumb_url+"');\"></div>")
+}else if(swf.indexOf("vimeo.com") >= 0) {
+    			if (swf.indexOf('clip_id=')!=-1) var temp = swf.split("clip_id=")[1];
+				else var temp=swf.split("/")[swf.split("/").length-1];
+				
+				if (temp.indexOf('&')!=-1) var vimeo_id = temp.split("&")[0];
+				else {
+					var vimeo_id = temp;
+				}
+
+	
+	$.getJSON("http://vimeo.com/api/v2/video/"+vimeo_id+".json?callback=?", function(d){
+		var thumb_url = d[0].thumbnail_large
+		$("#thumb_"+id+" .video").prepend("<div class=\"bg rounded\" style=\"background-size:150%;background-image:url('"+thumb_url+"');\"></div>")
+	});
+}
+
+			})
+		}      
+
+		$(document).ready(function(){
+			if (is_index) {
+				getVideoThumbs();
+			} else {
+				$('#posts').css('display','block');
+			}
+		});
+
+		ids=[];
+		function openlink(id){
+			window.location.href="/post/"+id;
+		}
+// -->
+        </script>
+        
 	</head>
   <body class="cargo {block:IndexPage}index{/block:IndexPage}{block:PermalinkPage}perma{/block:PermalinkPage}">
 		<div id="info" class="hide">
